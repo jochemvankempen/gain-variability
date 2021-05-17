@@ -51,10 +51,10 @@ classdef GainVariability
             if isnumeric(X)
                 
                 % check array input
-                [num_cond, num_trial] = length(X);
+                [num_cond, num_trial] = size(X);
                 assert(num_trial>num_cond, 'Number of trials is smaller than number of conditions, check input dimensions of X')
                 
-                tmp_X = cell(length(X),1);
+                tmp_X = cell(num_cond,1);
                 for icond = 1:num_cond
                     tmp_X{icond} = X(icond,X(icond,:)>-1); % get spike count/rate for each condition, omit trials with negative values
                 end
@@ -71,9 +71,11 @@ classdef GainVariability
                 assert(~(is_table_column(X,'rate') && is_table_column(X,'count')), 'rate & count column found, ambiguous input')
                 assert(is_table_column(X,'condition'), 'no column condition found')
                 
+                num_cond = length(unique(X.condition));
+                
                 % convert to cell array
-                tmp_X = cell(length(X),1);
-                for icond = 1:obj.num_cond
+                tmp_X = cell(num_cond,1);
+                for icond = 1:num_cond
                     idx_trial = X.condition==icond;
                     try
                         tmp_X{icond} = X.rate(idx_trial);
@@ -101,7 +103,7 @@ classdef GainVariability
             % compute mu, variance and number of trials for each condition
             obj.spike_concat = [];
             for icond = 1:obj.num_cond
-                spike_cond = X{icond}; % get spike count/rate for each condition
+                spike_cond = X{icond}(:)'; % get spike count/rate for each condition, ensure row vector
                 obj.mus(icond) = mean(spike_cond);
                 obj.s2s(icond) = var(spike_cond);
                 obj.spike_concat = [obj.spike_concat spike_cond];
