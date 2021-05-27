@@ -80,7 +80,7 @@ classdef GainVariability
                     try
                         tmp_X{icond} = X.rate(idx_trial);
                     catch
-                        tmp_X{icond} = X.rate(idx_trial);
+                        tmp_X{icond} = X.count(idx_trial);
                     end
                 end
                 X = tmp_X;
