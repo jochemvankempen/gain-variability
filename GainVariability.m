@@ -87,7 +87,7 @@ classdef GainVariability
                 clear tmp_X
                 
             else
-                error('variable X of unknown type')
+                error('variable X should be of type numeric, cell or table')
             end
 
             % init object variables
