@@ -336,6 +336,12 @@ classdef GainVariability
                     % negative log-likelihood per condition
                     nlls(icond) = -sum(gammaln(r+x)) + n*gammaln(r) - n*r*log(r/(xbar+r)) - sumx*log(xbar/(xbar+r)) + sum(log(gamma(x+1)));
                     %                     nlls(icond) = -sum(gammaln(r+x)) + n*gammaln(r) - n*r*log(r/(xbar+r)) - sumx*log(xbar/(xbar+r));
+                    
+                    % The same could be achieved using built-in
+                    % Matlab functions. However, these functions only take
+                    % round numbers (int) and would thus only be suited for
+                    % count data, not rate. 
+                    %                     nlls(icond) = sum(-log(nbinpdf(x,r,r/(xbar+r))))
                 end
                 
                 % negative log-likelihood across all conditions
@@ -361,6 +367,12 @@ classdef GainVariability
                 xbar = mean(x);
                 
                 nlls(icond) = + n*xbar - sumx*log(xbar)+ sum(log(gamma(x+1)));
+                
+                % The same could be achieved using built-in
+                % Matlab functions. However, these functions only take
+                % round numbers (int) and would thus only be suited for
+                % count data, not rate.
+                %                 nlls(icond) = sum(-log(poisspdf(x,xbar)));
             end
             
             % negative log-likelihood across all conditions
